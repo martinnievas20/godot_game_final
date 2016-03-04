@@ -116,13 +116,13 @@ func set_packet_peer_player(packet_peer):
 
 func start_client():
 	# Select a port for the client
-	var client_port = get_node("/root/playervariables").port + 1
+	var client_port = 3000 + 1
 	
 	while (packet_peer.listen(client_port) != OK):
 		client_port += 1
 	
 	# Set server address
-	packet_peer.set_send_address(get_node("/root/playervariables").ip, get_node("/root/playervariables").port)
+	packet_peer.set_send_address('127.0.0.1', 3000)
 	
 	# Try to connect to server
 	var attempts = 0

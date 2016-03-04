@@ -1,7 +1,13 @@
 import socket              
 import time
 import thread
+import pickle
 
+usuarios = []
+usuario = {'id':1,'username':'bot1','posx':100.00,'posy':100.00}
+usuarios.append(usuario)
+usuario = {'id':2,'username':'bot2','posx':120.00,'posy':120.00}
+usuarios.append(usuario)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('127.0.0.1', 3000))
@@ -23,6 +29,9 @@ def session(conn, addr):
                 print ("Connection with %s was closed by the client." % (addr[0]))
             else:
                 print "%s: %s" % (addr[0], msg)
+
+            for usuario in usuarios:
+                conn.send(str(usuario))
 
 while True:
     conn, addr = s.accept()
