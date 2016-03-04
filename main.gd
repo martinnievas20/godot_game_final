@@ -8,6 +8,7 @@ var timer = 0
 
 # For client
 var seq = -1
+const CONNECT_ATTEMPTS = 20
 
 var name_list = ["default"]
 var nombre = null
@@ -23,6 +24,7 @@ var packet_peer = PacketPeerUDP.new()
 
 func _ready():
 	Globals.total_player = get_node("player").get_children()
+	start_client()
 	set_process(true)
 	
 
@@ -109,3 +111,42 @@ func _process(delta):
 func set_packet_peer_player(packet_peer):
 	for player in Globals.total_player:
 		player.packet_peer = packet_peer
+
+
+
+func start_client():
+	# Select a port for the client
+	var client_port = get_node("/root/playervariables").port + 1
+	
+	while (packet_peer.listen(client_port) != OK):
+		client_port += 1
+	
+	# Set server address
+	packet_peer.set_send_address(get_node("/root/playervariables").ip, get_node("/root/playervariables").port)
+	
+	# Try to connect to server
+	var attempts = 0
+	var connected = false
+	
+	while (not connected and attempts < CONNECT_ATTEMPTS):
+		attempts += 1
+	
+		packet_peer.put_var(["connect"])
+		OS.delay_msec(50)
+		
+		while (packet_peer.get_available_packet_count() > 0):
+			var packet = packet_peer.get_var()
+			if (packet != null and packet[0] == "accepted"):
+				connected = true
+				break
+	
+	if (not connected):
+		
+		print("Error connecting to ", get_node("/root/playervariables").ip, ":", get_node("/root/playervariables").port)
+		return
+	else:
+		print("Connected to ", get_node("/root/playervariables").ip, ":", get_node("/root/playervariables").port)
+		#connect.set_text("Disconnect")
+		#start.set_disabled(true)
+		#set_host_boxes(false)
+	
