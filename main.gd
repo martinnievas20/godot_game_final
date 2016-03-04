@@ -9,6 +9,7 @@ var timer = 0
 # For client
 var seq = -1
 const CONNECT_ATTEMPTS = 20
+var connected = false
 
 var name_list = ["default"]
 var nombre = null
@@ -21,10 +22,30 @@ var i =0
 
 #esta clase la usa para la comunicacion
 var packet_peer = PacketPeerUDP.new()
+var connection = StreamPeerTCP.new()
 
 func _ready():
 	Globals.total_player = get_node("player").get_children()
-	start_client()
+	#start_client()
+	print(get_node("/root/playervariables").ip)
+	if (get_node("/root/playervariables").ip==null):
+		print("null")
+		get_node("/root/playervariables").ip="127.0.0.1"
+	else:
+		print(get_node("/root/playervariables").ip)
+		
+	connection.connect( get_node("/root/playervariables").ip, get_node("/root/playervariables").port)
+	
+	if connection.get_status() == connection.STATUS_CONNECTED:
+		print ("Connected to "+get_node("/root/playervariables").ip+" :"+str(get_node("/root/playervariables").port) );
+		set_process(true) # start processing if connected
+		connected = true # finally you can use this var ;)
+	elif connection.get_status() == StreamPeerTCP.STATUS_CONNECTING:
+		print ("Trying to connect "+get_node("/root/playervariables").ip+" :"+str(get_node("/root/playervariables").port) )
+		set_process(true) # or if trying to connect
+	elif connection.get_status() == connection.STATUS_NONE or connection.get_status() == StreamPeerTCP.STATUS_ERROR:
+		print ( "Couldn't connect to "+get_node("/root/playervariables").ip+" :"+str(get_node("/root/playervariables").port) )
+
 	set_process(true)
 	
 
