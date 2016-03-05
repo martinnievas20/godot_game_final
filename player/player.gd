@@ -39,3 +39,7 @@ func _fixed_process(delta):
 		motion = get_collision_normal().slide(motion)
 		motion=move(motion)
 		slide_attempts-=1
+	
+	#menu emergente
+	if (Input.is_action_pressed("menu")):
+		get_node("PopupPanel").popup()

@@ -45,7 +45,6 @@ func _ready():
 		set_process(true) # or if trying to connect
 	elif connection.get_status() == connection.STATUS_NONE or connection.get_status() == StreamPeerTCP.STATUS_ERROR:
 		print ( "Couldn't connect to "+get_node("/root/playervariables").ip+" :"+str(get_node("/root/playervariables").port) )
-
 	set_process(true)
 	
 
