@@ -48,6 +48,7 @@ func _ready():
 	set_process(true)
 	
 
+
 func _process(delta):
 	
 	#---------------------acá armo la trama y la manda-----editada por martin-----------------
@@ -127,6 +128,7 @@ func _process(delta):
 	
 
 ##------------funciones---------------
+
 # Set packet peer for player
 func set_packet_peer_player(packet_peer):
 	for player in Globals.total_player:
