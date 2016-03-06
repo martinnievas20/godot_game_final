@@ -62,8 +62,8 @@ func _process(delta):
 		for player in Globals.get("total_player"):
 			packet.append([get_node("/root/playervariables").nombre_jugador, player.get_pos(), player.get_rot(),"final"])
 			packet_peer.put_var(packet)
-			print("envio esto:")##################para debugg
-			print(packet)##################para debugg
+			#print("envio esto:")##################para debugg
+			#print(packet)##################para debugg
 		
 	
 	#Client update
